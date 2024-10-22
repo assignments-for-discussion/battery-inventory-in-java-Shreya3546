@@ -38,9 +38,9 @@ public class Main {
         CountsBySoH counts = countBatteriesByHealth(presentCapacities);
         
         // Assertions to validate the output
-        assert(counts.healthy == 2) : "Healthy count mismatch";   // 113 and 116
-        assert(counts.exchange == 3) : "Exchange count mismatch"; // 80, 95, 92
-        assert(counts.failed == 1) : "Failed count mismatch";      // 70
+        assert(counts.healthy == 2) : "Healthy count mismatch";   // 113 and 116 are healthy
+        assert(counts.exchange == 3) : "Exchange count mismatch"; // 80, 95, 92 are exchangeable
+        assert(counts.failed == 1) : "Failed count mismatch";      // 70 is failed
 
         // Additional test cases for boundary conditions
         int[] boundaryCapacities = {120, 83, 82, 63, 62, 0};
