@@ -1,59 +1,58 @@
 package bunchbysoh;
 
 public class Main {
-
-    //Class which holds the counts of the battery classifications
+    // Class to hold the counts of battery classifications
     static class CountsBySoH {
         public int healthy = 0;
         public int exchange = 0;
         public int failed = 0;
     }
 
-    // Method to classify the batteries
+    // Method to classify batteries based on their present capacities
     static CountsBySoH countBatteriesByHealth(int[] presentCapacities) {
         CountsBySoH counts = new CountsBySoH();
-        final double ratedCapacity = 120.0; 
+        final double ratedCapacity = 120.0; // Rated capacity for all batteries
 
-        // Iterate through each present capacity to calculate the SoH  
+        // Iterate through each present capacity to calculate SoH and classify
         for (int presentCapacity : presentCapacities) {
-            // Calculate SOH as a percentage
+            // Calculate state-of-health (SoH) as a percentage
             double stateOfHealth = (presentCapacity / ratedCapacity) * 100;
 
-            // Classify it based on the SoH thresholds
+            // Classify based on SoH thresholds
             if (stateOfHealth > 83) {
-                counts.healthy++;  
+                counts.healthy++;  // Healthy: SoH > 83%
             } else if (stateOfHealth >= 63) {
-                counts.exchange++;  
+                counts.exchange++;  // Exchange: 63% ≤ SoH ≤ 83%
             } else {
-                counts.failed++;  
+                counts.failed++;  // Failed: SoH < 63%
             }
         }
         
-        return counts;  // Return the counts 
+        return counts;  // Return the counts of each classification
     }
 
-    // Method to test the battery classification 
+    // Method to test the battery classification logic
     static void testBucketingByHealth() {
         System.out.println("Counting batteries by SoH...\n");
-        int[] presentCapacities = {113, 116, 80, 95, 92, 70}; 
+        int[] presentCapacities = {113, 116, 80, 95, 92, 70}; // Test capacities
         CountsBySoH counts = countBatteriesByHealth(presentCapacities);
         
         // Assertions to validate the output
-        assert(counts.healthy == 3) : "Healthy count mismatch";   
-        assert(counts.exchange == 2) : "Exchange count mismatch"; 
-        assert(counts.failed == 1) : "Failed count mismatch";      
+        assert(counts.healthy == 2) : "Healthy count mismatch";   // Corrected to 2
+        assert(counts.exchange == 3) : "Exchange count mismatch"; // 80, 95, 92 are exchangeable
+        assert(counts.failed == 1) : "Failed count mismatch";      // 70 is failed
 
         // Additional test cases for boundary conditions
-        int[] boundaryCapacities = {110, 83, 82, 63, 62, 0};
+        int[] boundaryCapacities = {120, 83, 82, 63, 62, 0};
         counts = countBatteriesByHealth(boundaryCapacities);
-        assert(counts.healthy == 1) : "Healthy count mismatch (boundary)";
-        assert(counts.exchange == 2) : "Exchange count mismatch (boundary)"; 
-        assert(counts.failed == 3) : "Failed count mismatch (boundary)"; 
+        assert(counts.healthy == 1) : "Healthy count mismatch (boundary)"; // 120 is healthy
+        assert(counts.exchange == 1) : "Exchange count mismatch (boundary)"; // 83 is exchangeable
+        assert(counts.failed == 4) : "Failed count mismatch (boundary)"; // 62, 0 are failed
 
         System.out.println("Done counting :)\n");
     }
 
     public static void main(String[] args) {
-        testBucketingByHealth();  
+        testBucketingByHealth();  // Execute the test
     }
 }
